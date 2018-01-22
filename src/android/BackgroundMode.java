@@ -26,6 +26,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
+
+import android.Manifest;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -38,6 +41,7 @@ import de.appplant.cordova.plugin.background.ForegroundService.ForegroundBinder;
 import static android.content.Context.BIND_AUTO_CREATE;
 
 public class BackgroundMode extends CordovaPlugin {
+    private static final String TAG = "BackgroundModePlugin";
 
     // Event types for callbacks
     private enum Event {
@@ -56,6 +60,12 @@ public class BackgroundMode extends CordovaPlugin {
 
     // Flag indicates if the service is bind
     private boolean isBind = false;
+
+    // Flag indicates if the WAKE_LOCK permission was checked and enabled
+    private boolean permissionOK = false;
+    public static final String WAKE_LOCK = Manifest.permission.WAKE_LOCK;
+    public static final int REQUEST_WAKE_LOCK = 3657;
+
 
     // Default settings for the notification
     private static JSONObject defaultSettings = new JSONObject();
@@ -107,6 +117,13 @@ public class BackgroundMode extends CordovaPlugin {
         }
 
         if (action.equalsIgnoreCase("enable")) {
+            if (!permissionsOK) {
+                cordova.getThreadPool().execute(new Runnable() {
+                    public void run() {
+                        verifyPermissions();
+                    }
+                });
+            }
             enableMode();
             callback.success();
             return true;
@@ -289,6 +306,21 @@ public class BackgroundMode extends CordovaPlugin {
                 webView.loadUrl("javascript:" + js);
             }
         });
+    }
+
+    private boolean verifyPermissions() {
+        // Check if we have the permissions
+        // and if we don't prompt the user
+        // Return true if the permissions are granted. Else returns false and the authorization or not arrives on
+        // call to method onRequestPermissionResult
+        if (!cordova.hasPermission(WAKE_LOCK)) {
+            Log.i(TAG, "Asking for WAKE_LOCK permission");
+            cordova.requestPermission(this, REQUEST_WAKE_LOCK, WAKE_LOCK);
+            permissionOK = cordova.hasPermission(WAKE_LOCK);
+        } else {
+            permissionOK = true;
+        }
+        return permissionOK;
     }
 
 }
