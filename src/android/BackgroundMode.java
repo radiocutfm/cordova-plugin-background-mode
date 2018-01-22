@@ -117,7 +117,7 @@ public class BackgroundMode extends CordovaPlugin {
         }
 
         if (action.equalsIgnoreCase("enable")) {
-            if (!permissionsOK) {
+            if (!permissionOK) {
                 cordova.getThreadPool().execute(new Runnable() {
                     public void run() {
                         verifyPermissions();
@@ -309,8 +309,7 @@ public class BackgroundMode extends CordovaPlugin {
     }
 
     private boolean verifyPermissions() {
-        // Check if we have the permissions
-        // and if we don't prompt the user
+        // Check if we have the permissions and if we don't prompt the user
         // Return true if the permissions are granted. Else returns false and the authorization or not arrives on
         // call to method onRequestPermissionResult
         if (!cordova.hasPermission(WAKE_LOCK)) {
