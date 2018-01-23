@@ -25,6 +25,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
+import android.net.ConnectivityManager;
 import android.support.v4.net.ConnectivityManagerCompat;
 
 import android.content.Context;
@@ -143,16 +144,16 @@ class BackgroundExt {
     // codebeat:enable[ABC]
 
     private void getRestrictBackgroundStatus(CallbackContext callback) {
-        ConnectivityManagerCompat connectivityManager = (ConnectivityManagerCompat) getService(CONNECTIVITY_SERVICE);
-        switch (connectivityManager.getRestrictBackgroundStatus()) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getService(CONNECTIVITY_SERVICE);
+        switch (ConnectivityManagerCompat.getRestrictBackgroundStatus(connectivityManager)) {
             case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED:
-                callback.sucess("RESTRICT_BACKGROUND_STATUS_ENABLED");
+                callback.success("RESTRICT_BACKGROUND_STATUS_ENABLED");
                 break;
             case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_WHITELISTED:
-                callback.sucess("RESTRICT_BACKGROUND_STATUS_WHITELISTED");
+                callback.success("RESTRICT_BACKGROUND_STATUS_WHITELISTED");
                 break;
             case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED:
-                callback.sucess("RESTRICT_BACKGROUND_STATUS_DISABLED");
+                callback.success("RESTRICT_BACKGROUND_STATUS_DISABLED");
                 break;
         }
     }
