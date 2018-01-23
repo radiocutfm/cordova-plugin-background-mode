@@ -175,7 +175,7 @@ class BackgroundExt {
 
     private void isIgnoringBatteryOptimizations(CallbackContext callback) {
         PowerManager pm = (PowerManager) getService(POWER_SERVICE);
-        if (pm.isIgnoringBatteryOptimizations(this.cordova.getActivity().getPackageName())) {
+        if (pm.isIgnoringBatteryOptimizations(getApp().getPackageName())) {
             callback.success("true");
         } else {
             callback.success("false");
@@ -183,15 +183,15 @@ class BackgroundExt {
     }
 
     private void requestSetting(CallbackContext callback, final String settingName) {
-        final Uri packageUri = Uri.parse("package:" + this.cordova.getActivity().getPackageName());
+        final Uri packageUri = Uri.parse("package:" + getApp().getPackageName());
         try {
             Intent intent = new Intent(settingName, packageUri);
-            cordova.getActivity().startActivity(intent);
+            getApp().startActivity(intent);
             callback.success(settingName + " done");
         } catch (ActivityNotFoundException e) {
             try {
                 Intent intent = new Intent(settingName);
-                cordova.getActivity().startActivity(intent);
+                getApp().startActivity(intent);
                 callback.success(settingName + "done - 2nd Intent");
             } catch (ActivityNotFoundException ee) {
                 ee.printStackTrace();
