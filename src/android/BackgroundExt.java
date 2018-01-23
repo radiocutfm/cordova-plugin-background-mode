@@ -178,7 +178,7 @@ class BackgroundExt {
         if (pm.isIgnoringBatteryOptimizations(this.cordova.getActivity().getPackageName())) {
             callback.success("true");
         } else {
-            callback.success("false")
+            callback.success("false");
         }
     }
 
