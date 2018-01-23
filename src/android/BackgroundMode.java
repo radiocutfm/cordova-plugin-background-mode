@@ -317,6 +317,7 @@ public class BackgroundMode extends CordovaPlugin {
             cordova.requestPermission(this, REQUEST_WAKE_LOCK, WAKE_LOCK);
             permissionOK = cordova.hasPermission(WAKE_LOCK);
         } else {
+            Log.i(TAG, "WAKE_LOCK permission OK");
             permissionOK = true;
         }
         return permissionOK;
