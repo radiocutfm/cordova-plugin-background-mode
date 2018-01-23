@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.ActivityNotFoundException;
+import android.provider.Settings;
 import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
@@ -140,7 +141,7 @@ public class BackgroundMode extends CordovaPlugin {
         if (action.equalsIgnoreCase("requestIgnoreBatteryOptimizations")) {
             String intentData = args.getString(0);
             try {
-                Intent intent = new Intent("ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS");
+                Intent intent = new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
                 intent.setData(Uri.parse(intentData));
                 cordova.getActivity().startActivity(intent);
                 callback.success("REQUEST_IGNORE_BATTERY_OPTIMIZATIONS done");
