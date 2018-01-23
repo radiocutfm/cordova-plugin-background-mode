@@ -25,10 +25,11 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.ActivityNotFoundException;
 import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
-import android.provider;
+import android.provider.Settings;
 
 import android.Manifest;
 
@@ -138,15 +139,15 @@ public class BackgroundMode extends CordovaPlugin {
         }
 
         if (action.equalsIgnoreCase("requestIgnoreBatteryOptimizations")) {
-            String intentData = data.getString(0);
+            String intentData = args.getString(0);
             try {
-                Intent intent = new Intent(android.provider.Settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                Intent intent = new Intent(Settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
                 intent.setData(Uri.parse(intentData));
                 startActivity(intent);
                 callback.success();
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                callback.error();
+                callback.error("Error, activity REQUEST_IGNORE_BATTERY_OPTIMIZATIONS not found");
             }
             return true;
         }

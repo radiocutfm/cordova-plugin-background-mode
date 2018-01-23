@@ -161,9 +161,9 @@ exports.disableWebViewOptimizations = function() {
  *
  * @return [ Void ]
  */
-exports.requestIgnoreBatteryOptimizations = function(package) {
+exports.requestIgnoreBatteryOptimizations = function(package, onSuccess, onError) {
     if (this._isAndroid) {
-        cordova.exec(null, null, 'BackgroundMode', 'requestIgnoreBatteryOptimizations', [package]);
+        cordova.exec(onSuccess, onError, 'BackgroundMode', 'requestIgnoreBatteryOptimizations', [package]);
     }
 };
 
