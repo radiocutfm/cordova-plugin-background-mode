@@ -161,9 +161,21 @@ exports.disableWebViewOptimizations = function() {
  *
  * @return [ Void ]
  */
-exports.requestIgnoreBatteryOptimizations = function(package, onSuccess, onError) {
+exports.requestIgnoreBatteryOptimizations = function(onSuccess, onError) {
     if (this._isAndroid) {
-        cordova.exec(onSuccess, onError, 'BackgroundMode', 'requestIgnoreBatteryOptimizations', [package]);
+        cordova.exec(onSuccess, onError, 'BackgroundMode', 'requestIgnoreBatteryOptimizations', []);
+    }
+};
+
+
+/**
+ * Requests to the user to disable battery optimizations for the app
+ *
+ * @return [ Void ]
+ */
+exports.requestIgnoreDataBackgroundRestrictionSettings = function(onSuccess, onError) {
+    if (this._isAndroid) {
+        cordova.exec(onSuccess, onError, 'BackgroundMode', 'requestIgnoreDataBackgroundRestrictionSettings', []);
     }
 };
 
@@ -176,6 +188,18 @@ exports.requestIgnoreBatteryOptimizations = function(package, onSuccess, onError
 exports.getRestrictBackgroundStatus = function(onSuccess, onError) {
     if (this._isAndroid) {
         cordova.exec(onSuccess, onError, 'BackgroundMode', 'getRestrictBackgroundStatus', []);
+    }
+};
+
+/**
+ * Gets RestrictBackgroundStatus 
+ *  
+ * https://developer.android.com/reference/android/net/ConnectivityManager.html#getRestrictBackgroundStatus()
+ *
+ */
+exports.isIgnoringBatteryOptimizations= function(onSuccess, onError) {
+    if (this._isAndroid) {
+        cordova.exec(onSuccess, onError, 'BackgroundMode', 'isIgnoringBatteryOptimizations', []);
     }
 };
 

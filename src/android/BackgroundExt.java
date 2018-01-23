@@ -30,6 +30,9 @@ import android.support.v4.net.ConnectivityManagerCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
+import android.content.ActivityNotFoundException;
+import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.View;
@@ -139,6 +142,18 @@ class BackgroundExt {
         if (action.equalsIgnoreCase("getRestrictBackgroundStatus")) {
             getRestrictBackgroundStatus(callback);
         }
+
+        if (action.equalsIgnoreCase("isIgnoringBatteryOptimizations")) {
+            isIgnoringBatteryOptimizations(callback);
+        }
+
+        if (action.equalsIgnoreCase("requestIgnoreBatteryOptimizations")) {
+            requestSetting(callback, android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        }
+
+        if (action.equalsIgnoreCase("requestIgnoreDataBackgroundRestrictionSettings")) {
+            requestSetting(callback, android.provider.Settings.ACTION_IGNORE_BACKGROUND_DATA_RESTRICTIONS_SETTINGS);
+        }
     }
 
     // codebeat:enable[ABC]
@@ -155,6 +170,33 @@ class BackgroundExt {
             case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED:
                 callback.success("RESTRICT_BACKGROUND_STATUS_DISABLED");
                 break;
+        }
+    }
+
+    private void isIgnoringBatteryOptimizations(CallbackContext callback) {
+        PowerManager pm = (PowerManager) getService(POWER_SERVICE);
+        if (pm.isIgnoringBatteryOptimizations(this.cordova.getActivity().getPackageName())) {
+            callback.success("true");
+        } else {
+            callback.success("false")
+        }
+    }
+
+    private void requestSetting(CallbackContext callback, final String settingName) {
+        final Uri packageUri = Uri.parse("package:" + this.cordova.getActivity().getPackageName());
+        try {
+            Intent intent = new Intent(settingName, packageUri);
+            cordova.getActivity().startActivity(intent);
+            callback.success(settingName + " done");
+        } catch (ActivityNotFoundException e) {
+            try {
+                Intent intent = new Intent(settingName);
+                cordova.getActivity().startActivity(intent);
+                callback.success(settingName + "done - 2nd Intent");
+            } catch (ActivityNotFoundException ee) {
+                ee.printStackTrace();
+                callback.error("Error, intent " + settingName + " not found");
+            }
         }
     }
 
