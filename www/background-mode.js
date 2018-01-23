@@ -157,6 +157,17 @@ exports.disableWebViewOptimizations = function() {
 };
 
 /**
+ * Requests to the user to disable battery optimizations for the app
+ *
+ * @return [ Void ]
+ */
+exports.requestIgnoreBatteryOptimizations = function(package) {
+    if (this._isAndroid) {
+        cordova.exec(null, null, 'BackgroundMode', 'requestIgnoreBatteryOptimizations', [package]);
+    }
+};
+
+/**
  * Move app to background (Android only).
  *
  * @return [ Void ]

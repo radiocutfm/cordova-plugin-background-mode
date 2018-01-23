@@ -25,8 +25,10 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
+import android.provider;
 
 import android.Manifest;
 
@@ -132,6 +134,20 @@ public class BackgroundMode extends CordovaPlugin {
         if (action.equalsIgnoreCase("disable")) {
             disableMode();
             callback.success();
+            return true;
+        }
+
+        if (action.equalsIgnoreCase("requestIgnoreBatteryOptimizations")) {
+            String intentData = data.getString(0);
+            try {
+                Intent intent = new Intent(android.provider.Settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse(intentData));
+                startActivity(intent);
+                callback.success();
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                callback.error();
+            }
             return true;
         }
 
