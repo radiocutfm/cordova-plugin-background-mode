@@ -148,9 +148,9 @@ public class BackgroundMode extends CordovaPlugin {
                 try {
                     Intent intent = new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
                     cordova.getActivity().startActivity(intent);
-                    callback.success("REQUEST_IGNORE_BATTERY_OPTIMIZATIONS done");
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
+                    callback.success("REQUEST_IGNORE_BATTERY_OPTIMIZATIONS done - 2nd Intent");
+                } catch (ActivityNotFoundException ee) {
+                    ee.printStackTrace();
                     callback.error("Error, activity ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS not found");
                 }
             }
