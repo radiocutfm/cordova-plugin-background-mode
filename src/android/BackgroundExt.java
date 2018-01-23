@@ -25,6 +25,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
+import android.net.ConnectivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -44,10 +45,15 @@ import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.POWER_SERVICE;
+import static android.content.Context.CONNECTIVITY_SERVICE;
 import static android.view.WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON;
 import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 import static android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
+
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_DISABLED;
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_WHITELISTED;
 
 class BackgroundExt {
 
@@ -130,9 +136,28 @@ class BackgroundExt {
             wakeup();
             unlock();
         }
+
+        if (action.equalsIgnoreCase("getRestrictBackgroundStatus")) {
+            getRestrictBackgroundStatus(callback);
+        }
     }
 
     // codebeat:enable[ABC]
+
+    private void getRestrictBackgroundStatus(CallbackContext callback) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getService(CONNECTIVITY_SERVICE);
+        switch (connectivityManager.getRestrictBackgroundStatus()) {
+            case RESTRICT_BACKGROUND_STATUS_ENABLED:
+                callback.sucess("RESTRICT_BACKGROUND_STATUS_ENABLED");
+                break;
+            case RESTRICT_BACKGROUND_STATUS_WHITELISTED:
+                callback.sucess("RESTRICT_BACKGROUND_STATUS_WHITELISTED");
+                break;
+            case RESTRICT_BACKGROUND_STATUS_DISABLED:
+                callback.sucess("RESTRICT_BACKGROUND_STATUS_DISABLED");
+                break;
+        }
+    }
 
     /**
      * Move app to background.

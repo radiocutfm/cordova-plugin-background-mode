@@ -168,6 +168,18 @@ exports.requestIgnoreBatteryOptimizations = function(package, onSuccess, onError
 };
 
 /**
+ * Gets RestrictBackgroundStatus 
+ *  
+ * https://developer.android.com/reference/android/net/ConnectivityManager.html#getRestrictBackgroundStatus()
+ *
+ */
+exports.getRestrictBackgroundStatus = function(onSuccess, onError) {
+    if (this._isAndroid) {
+        cordova.exec(onSuccess, onError, 'BackgroundMode', 'getRestrictBackgroundStatus', []);
+    }
+};
+
+/**
  * Move app to background (Android only).
  *
  * @return [ Void ]
