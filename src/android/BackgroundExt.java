@@ -25,7 +25,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
-import android.net.ConnectivityManager;
+import android.support.v4.net.ConnectivityManagerCompat;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -51,9 +52,6 @@ import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 import static android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
 
-import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_DISABLED;
-import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
-import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_WHITELISTED;
 
 class BackgroundExt {
 
@@ -145,15 +143,15 @@ class BackgroundExt {
     // codebeat:enable[ABC]
 
     private void getRestrictBackgroundStatus(CallbackContext callback) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getService(CONNECTIVITY_SERVICE);
+        ConnectivityManagerCompat connectivityManager = (ConnectivityManagerCompat) getService(CONNECTIVITY_SERVICE);
         switch (connectivityManager.getRestrictBackgroundStatus()) {
-            case RESTRICT_BACKGROUND_STATUS_ENABLED:
+            case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED:
                 callback.sucess("RESTRICT_BACKGROUND_STATUS_ENABLED");
                 break;
-            case RESTRICT_BACKGROUND_STATUS_WHITELISTED:
+            case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_WHITELISTED:
                 callback.sucess("RESTRICT_BACKGROUND_STATUS_WHITELISTED");
                 break;
-            case RESTRICT_BACKGROUND_STATUS_DISABLED:
+            case ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED:
                 callback.sucess("RESTRICT_BACKGROUND_STATUS_DISABLED");
                 break;
         }
