@@ -172,8 +172,9 @@ public class BackgroundMode extends CordovaPlugin {
     public void onDestroy() {
         stopService();
         super.onDestroy();
-        Log.i(TAG, "Killing process");
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Log.i(TAG, "NOT Killing process");
+/*        Log.i(TAG, "Killing process");
+        android.os.Process.killProcess(android.os.Process.myPid()); */
     }
 
     /**
